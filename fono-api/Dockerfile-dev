@@ -1,0 +1,23 @@
+FROM node:18-alpine as init
+
+WORKDIR /fono
+
+COPY ./src ./src
+COPY ./package.json ./package.json
+COPY ./babel.config.json ./babel.config.json
+COPY ./jest.config.json ./jest.config.json
+COPY ./tsconfig.json ./tsconfig.json
+COPY ./package-lock.json ./package-lock.json
+
+RUN npm install
+
+COPY ./* ./
+COPY ./.env ./.env
+
+FROM node:18-alpine
+
+WORKDIR /fono
+
+COPY --from=init /fono ./
+
+CMD npm run sync-db --experimental-modules && npm run build --experimental-modules && npm run populate && npm run dev

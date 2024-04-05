@@ -1,0 +1,86 @@
+version: "3.9"
+
+volumes:
+  fono-db:
+  # fono-api:
+  #   driver: local
+  #   driver_opts:
+  #     device: ./fono-api
+  # fono-app:
+    # driver: local
+    # driver_opts:
+      # device: ./fono-app
+networks:
+  fono:
+    external:
+      name: fono
+
+services:
+  fono-app-dev:
+    build:
+      context: ./fono-app
+      dockerfile: Dockerfile-dev
+    container_name: fono-app-dev
+    image: fono-app-dev:0.1
+    volumes:
+      - ./fono-app:/fono
+    ports:
+      - "80:3000"
+    depends_on:
+      - fono-api-dev
+    links:
+      - fono-api-dev
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+    stdin_open: true
+  
+  comp-analise:
+    build:
+      context: ./analise-comp
+      dockerfile: Dockerfile-dev
+    container_name:  comp-analise
+    image: comp-analise:0.1
+    volumes:
+      - ./analise-comp/comp.py:/comp.py
+      - ./analise-comp/app.py:/app.py
+    networks:
+      - fono
+    ports:
+      - "6002:6002"
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+  
+  
+  fono-api-dev:
+    build:
+      context: ./fono-api
+      dockerfile: Dockerfile-dev
+    container_name: fono-api-dev
+    image: fono-api-dev:0.1
+    networks:
+      - fono
+    ports:
+      - "4002:4002"
+    volumes:
+      - ./fono-api:/fono
+    depends_on:
+      - fono-db-dev
+      - comp-analise
+    links:
+      - fono-db-dev
+      - comp-analise
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+  
+  fono-db-dev:
+    build:
+      context: ./fono-db
+      dockerfile: Dockerfile-dev
+    container_name: fono-db-dev
+    image: fono-db-dev:0.1
+    networks:
+      - fono
+    ports:
+      - "5437:5437"
+    volumes:
+      - fono-db:/var/lib/postgresql/data

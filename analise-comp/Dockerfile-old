@@ -1,0 +1,22 @@
+FROM python:3.9-slim as CompTrocas
+
+WORKDIR /fono
+
+COPY ./analise-trocas.py ./
+COPY ./trocas.txt ./
+
+RUN python ./analise-trocas.py > ./trocas_analisadas
+
+# ajuste de codificação
+RUN sed -i '1s/^/<meta charset="UTF-8">\n/' ./trocas_analisadas
+# RUN sed -i '1s/^/<meta charset="UTF-8">\n/'  /etc/nginx/conf.d/default.conf
+# RUN sed -i '/location \/ {/ a\
+# add_header Access-Control-Allow-Origin *;\
+# }' /etc/nginx/conf.d/default.conf
+
+FROM nginx
+
+COPY --from=CompTrocas ./fono/trocas_analisadas /usr/share/nginx/html/index.html
+COPY ./default.conf /etc/nginx/conf.d/default.conf
+
+CMD ["nginx", "-g", "daemon off;"]

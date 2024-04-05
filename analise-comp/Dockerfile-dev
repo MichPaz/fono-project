@@ -1,0 +1,22 @@
+FROM python:3.9-slim as CompTrocas
+
+# WORKDIR /fono
+
+ARG FLASK_ENV="development" \
+    FLASK_APP="app.py" \
+    FLASK_RUN_PORT=6002
+
+ENV FLASK_ENV=${FLASK_ENV} \
+    FLASK_APP=${FLASK_APP} \
+    FLASK_RUN_PORT=${FLASK_RUN_PORT}
+
+COPY ./comp.py ./comp.py
+COPY ./app.py ./app.py
+
+RUN pip install Flask
+RUN pip install -U flask-cors
+
+EXPOSE ${FLASK_RUN_PORT}
+
+# CMD flask run --debug
+CMD ["flask", "--app=app", "run", "--host=0.0.0.0", "--debug"]
