@@ -34,15 +34,15 @@ services:
     - "host.docker.internal:host-gateway"
     stdin_open: true
   
-  comp-analise:
+  fono-comp-dev:
     build:
-      context: ./analise-comp
+      context: ./fono-comp
       dockerfile: Dockerfile-dev
-    container_name:  comp-analise
-    image: comp-analise:0.1
+    container_name:  fono-comp-dev
+    image: fono-comp-dev:0.1
     volumes:
-      - ./analise-comp/comp.py:/comp.py
-      - ./analise-comp/app.py:/app.py
+      - ./fono-comp/comp.py:/comp.py
+      - ./fono-comp/app.py:/app.py
     networks:
       - fono
     ports:
@@ -65,10 +65,10 @@ services:
       - ./fono-api:/fono
     depends_on:
       - fono-db-dev
-      - comp-analise
+      - fono-comp-dev
     links:
       - fono-db-dev
-      - comp-analise
+      - fono-comp-dev
     extra_hosts:
     - "host.docker.internal:host-gateway"
   

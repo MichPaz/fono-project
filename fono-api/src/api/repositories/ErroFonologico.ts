@@ -12,6 +12,9 @@ interface IErroFonologicoRepository {
 class ErroFonologicoRepository implements IErroFonologicoRepository {
     create(payload: ErroFonologicoInput): Promise<ErroFonologicoOutput> {
         const erroFonologico = ErroFonologico.create({...payload})
+        // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        // console.log('erroFonologico: ', erroFonologico)
+        // erroFonologico.make
         return erroFonologico
     }
 

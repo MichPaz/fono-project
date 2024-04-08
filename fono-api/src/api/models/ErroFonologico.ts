@@ -47,42 +47,41 @@ class ErroFonologico extends Model<ErroFonologicoAttributes, ErroFonologicoInput
     public readonly updatedAt!: Date
     public readonly deletedAt!: Date
 
-    async makeDesvios() {
-        const url = appConfig.comp.domain + '/comparacao'
-        const options = {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            },
-            data: {
-                errado: this.errado,
-                idealizado: this.idealizado
-            }
-        };
+    // async criarDesvios() {
+    //     const url = appConfig.comp.domain + '/comparacao'
+    //     const options = {
+    //         method: 'GET',
+    //         headers: {
+    //             'content-type': 'application/json'
+    //         },
+    //         data: {
+    //             errado: this.errado,
+    //             idealizado: this.idealizado
+    //         }
+    //     };
+
+    //     console.log('url: ', url)
+    //     console.log('options: ', options)
+
+    //     fetch(url, options)
+    //         // .then(res => res.json())
+    //         .then(res => res)
+    //         // .then(json => console.log(json))
+    //         .catch(err => console.error('error:' + err));
 
 
-        fetch(url, options)
-            .then(res => res.json())
-            .then(json => console.log(json))
-            .catch(err => console.error('error:' + err));
+    //     try {
+    //         const res = await fetch(url, options);
+    //         console.log('res', res)
+    //         // console.log('res.data', res.data)
+    //         console.log('res.body', res.body)
+    //         const json = await res.json();
+    //         console.log('json :', json);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
 
-
-        try {
-            const res = await fetch(url, options);
-            const json = await res.json();
-            console.log('json :', json);
-        } catch (err) {
-            console.log(err);
-        }
-
-        // const comp = await mockAxios.get(, {
-        //     data: {
-        //         errado: this.errado,
-        //         idealizado: this.idealizado
-        //     }
-        // })
-        // console.log("comp: ", comp)
-    }
+    // }
 }
 
 ErroFonologico.init(
@@ -111,6 +110,43 @@ ErroFonologico.init(
         desvios: {
             type: DataTypes.VIRTUAL,
             allowNull: false,
+            async get() {
+                const url = appConfig.comp.domain + '/comparacao'
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    data: {
+                        errado: this.errado,
+                        idealizado: this.idealizado
+                    }
+                };
+
+                console.log('url: ', url)
+                console.log('options: ', options)
+
+                fetch(url, options)
+                    // .then(res => res.json())
+                    .then(res => {
+                        console.log(res.json())
+                    })
+                    // .then(json => console.log(json))
+                    .catch(err => console.error('error:' + err));
+
+
+                // try {
+                //     const res = await fetch(url, options);
+                //     console.log('res', res)
+                //     // console.log('res.data', res.data)
+                //     console.log('res.body', res.body)
+                //     const json = await res.json();
+                //     console.log('json :', json);
+                // } catch (err) {
+                //     console.log(err);
+                // }
+                return []
+            },
         },
         userId: {
             type: DataTypes.INTEGER,

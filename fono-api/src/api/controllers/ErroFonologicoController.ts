@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { ErroFonologicoInput, ErroFonologicoInputUpdate } from '../models/ErroFonologico'
+import ErroFonologico, { ErroFonologicoInput, ErroFonologicoInputUpdate } from '../models/ErroFonologico'
 import ErroFonologicoService from '../services/ErroFonologicoService'
 
 class UserController {
@@ -11,7 +11,9 @@ class UserController {
         try {
             const payload: ErroFonologicoInput = { ...req.body, userId: req.userdata.id }
             const erroFonologico = await ErroFonologicoService.create(payload)
-            // erroFonologico.mak
+            // console.log('payload: ', payload)
+            // console.log('erroFonologico: ', erroFonologico)
+            // await erroFonologico.criarDesvios()
             res.status(200).send({
                 message: 'Erro Fonológico created successfully',
                 data: erroFonologico
