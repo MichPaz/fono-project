@@ -22,7 +22,7 @@ class ErroFonologicoRepository implements IErroFonologicoRepository {
 
     getDetail(id: number): Promise<ErroFonologicoOutput | null> {
         return ErroFonologico.findByPk(id, {
-            attributes: ['id', 'tipo_interacao', 'tipo_acao', 'errado', 'idealizado'],
+            attributes: ['id', 'tipo_interacao', 'tipo_acao', 'realizado', 'idealizado'],
             // include: [
                 // {
                 //     model: Role,

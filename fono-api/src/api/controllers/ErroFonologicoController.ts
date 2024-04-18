@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import ErroFonologico, { ErroFonologicoInput, ErroFonologicoInputUpdate } from '../models/ErroFonologico'
 import ErroFonologicoService from '../services/ErroFonologicoService'
+import { makeDesvios } from '../models/Desvios'
 
 class UserController {
     async create(
@@ -29,10 +30,13 @@ class UserController {
         next: NextFunction
     ): Promise<void> {
         try {
-            const erroFonologico = await ErroFonologicoService.get()
+            const errosFonologicos = await ErroFonologicoService.get()
+            for (const erroFonologico of errosFonologicos) {
+                erroFonologico.desvios = await makeDesvios(erroFonologico.idealizado, erroFonologico.realizado)
+            }
             res.status(200).send({
                 message: 'Erro Fonológico fetched successfully',
-                data: erroFonologico
+                data: errosFonologicos
             })
         } catch (error) {
             next(error)

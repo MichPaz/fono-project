@@ -2,8 +2,9 @@ import { Request } from 'express';
 import { Model, DataTypes, Optional } from 'sequelize';
 import { db } from '../../database/config';
 import { UserOutput } from './User';
-import Desvios from './Desvios';
-import appConfig from '../../config/appConfig';
+import Desvios /*, { classificaTipoDesvio, Comparacao, makeDesvios } */ from './Desvios';
+// import appConfig from '../../config/appConfig';
+// import Desvio from './Desvios';
 // import fetch from 'node-fetch';
 // import {Agent} from 'http'
 
@@ -16,7 +17,7 @@ interface ErroFonologicoAttributes {
     id: number
     tipo_interacao: TipoIteracao
     tipo_acao: TipoAcao
-    errado: string
+    realizado: string
     idealizado: string
     desvios: Desvios[]
     userId?: number
@@ -38,7 +39,7 @@ class ErroFonologico extends Model<ErroFonologicoAttributes, ErroFonologicoInput
     public id!: number
     public tipo_interacao!: TipoIteracao
     public tipo_acao!: TipoAcao
-    public errado!: string
+    public realizado!: string
     public idealizado!: string
     public desvios: Desvios[] = []
     public userId!: number
@@ -46,42 +47,6 @@ class ErroFonologico extends Model<ErroFonologicoAttributes, ErroFonologicoInput
     public readonly createdAt!: Date
     public readonly updatedAt!: Date
     public readonly deletedAt!: Date
-
-    // async criarDesvios() {
-    //     const url = appConfig.comp.domain + '/comparacao'
-    //     const options = {
-    //         method: 'GET',
-    //         headers: {
-    //             'content-type': 'application/json'
-    //         },
-    //         data: {
-    //             errado: this.errado,
-    //             idealizado: this.idealizado
-    //         }
-    //     };
-
-    //     console.log('url: ', url)
-    //     console.log('options: ', options)
-
-    //     fetch(url, options)
-    //         // .then(res => res.json())
-    //         .then(res => res)
-    //         // .then(json => console.log(json))
-    //         .catch(err => console.error('error:' + err));
-
-
-    //     try {
-    //         const res = await fetch(url, options);
-    //         console.log('res', res)
-    //         // console.log('res.data', res.data)
-    //         console.log('res.body', res.body)
-    //         const json = await res.json();
-    //         console.log('json :', json);
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-
-    // }
 }
 
 ErroFonologico.init(
@@ -99,7 +64,7 @@ ErroFonologico.init(
             type: DataTypes.STRING,
             allowNull: false
         },
-        errado: {
+        realizado: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -110,43 +75,10 @@ ErroFonologico.init(
         desvios: {
             type: DataTypes.VIRTUAL,
             allowNull: false,
-            async get() {
-                const url = appConfig.comp.domain + '/comparacao'
-                const options = {
-                    method: 'GET',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    data: {
-                        errado: this.errado,
-                        idealizado: this.idealizado
-                    }
-                };
-
-                console.log('url: ', url)
-                console.log('options: ', options)
-
-                fetch(url, options)
-                    // .then(res => res.json())
-                    .then(res => {
-                        console.log(res.json())
-                    })
-                    // .then(json => console.log(json))
-                    .catch(err => console.error('error:' + err));
-
-
-                // try {
-                //     const res = await fetch(url, options);
-                //     console.log('res', res)
-                //     // console.log('res.data', res.data)
-                //     console.log('res.body', res.body)
-                //     const json = await res.json();
-                //     console.log('json :', json);
-                // } catch (err) {
-                //     console.log(err);
-                // }
-                return []
-            },
+            // get: () => {
+            //     const desvios = makeDesvios(this.idealizado, this.realizado)
+            //     return desvios
+            // },
         },
         userId: {
             type: DataTypes.INTEGER,

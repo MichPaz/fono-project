@@ -12,21 +12,18 @@ interface IErroFonologicoRepository {
 class ErroFonologicoRepository implements IErroFonologicoRepository {
     create(payload: ErroFonologicoInput): Promise<ErroFonologicoOutput> {
         const erroFonologico = ErroFonologico.create({...payload})
-        // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-        // console.log('erroFonologico: ', erroFonologico)
-        // erroFonologico.make
         return erroFonologico
     }
 
     get(): Promise<ErroFonologicoOutput[]> {
         return ErroFonologico.findAll({
-            attributes: ['id', 'email', 'username', 'isValidEmail']
+            attributes: ['id', 'tipo_interacao', 'tipo_acao', 'realizado', 'idealizado']
         })
     }
 
     getDetail(id: number): Promise<ErroFonologicoOutput | null> {
         return ErroFonologico.findByPk(id, {
-            attributes: ['id', 'tipo_interacao', 'tipo_acao', 'errado', 'idealizado'],
+            attributes: ['id', 'tipo_interacao', 'tipo_acao', 'realizado', 'idealizado'],
             // include: [
                 // {
                 //     model: Role,

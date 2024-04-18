@@ -50,7 +50,6 @@ services:
     extra_hosts:
     - "host.docker.internal:host-gateway"
   
-  
   fono-api-dev:
     build:
       context: ./fono-api

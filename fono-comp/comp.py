@@ -20,9 +20,9 @@ def achar_prox_corresp(palavra1, palavra2):
             i2 += 1
         # print('i1: ', i1, 'i2: ', i2)
 
-def comparacao(errado, idealizado):
+def comparacao(realizado, idealizado):
     
-    # except_msg="sem correspondencia sintatica entre \""+errado+"\" e \""+idealizado+"\""
+    # except_msg="sem correspondencia sintatica entre \""+realizado+"\" e \""+idealizado+"\""
     # msg_iteracao=0
     
     blocos = []
@@ -36,21 +36,21 @@ def comparacao(errado, idealizado):
     bloco_index = 0
     
     ideal_index = 0
-    errado_index = 0
-    while errado_index < len(errado):
+    realizado_index = 0
+    while realizado_index < len(realizado):
         # print('_'*30)
         # print('                 bloco_index: ', bloco_index)
         # print('                      blocos: ', blocos)
         # print('                blocos_ideal: ', blocos_ideal)
         # print('      blocos_correspondencia: ', blocos_correspondencia)
         # print('\n')
-        # print('                errado_index: ', errado_index)
+        # print('                realizado_index: ', realizado_index)
         # print('                 ideal_index: ', ideal_index)
         # print('\n')
-        # print('        errado[errado_index]: ', errado[errado_index])
+        # print('        realizado[realizado_index]: ', realizado[realizado_index])
         # print('     idealizado[ideal_index]: ', idealizado[ideal_index])
         try:
-            comp= bool(errado[errado_index]==idealizado[ideal_index])
+            comp= bool(realizado[realizado_index]==idealizado[ideal_index])
         except:
             # print(except_msg)
             pass
@@ -65,7 +65,7 @@ def comparacao(errado, idealizado):
                 blocos_correspondencia.append(True)
                 bloco_index += 1
                 # print('UEPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2')
-            blocos[bloco_index] += errado[errado_index]
+            blocos[bloco_index] += realizado[realizado_index]
             try:
                 # print('UEPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3')
                 blocos_ideal[bloco_index] += idealizado[ideal_index]
@@ -87,18 +87,18 @@ def comparacao(errado, idealizado):
                 blocos_correspondencia.append(False)
                 bloco_index += 1
             
-            prox_corresp =  achar_prox_corresp(errado[errado_index:], idealizado[ideal_index:])
+            prox_corresp =  achar_prox_corresp(realizado[realizado_index:], idealizado[ideal_index:])
             if(prox_corresp):
-                prox_corresp_errado_index, prox_corresp_ideal_index = prox_corresp
-                # print("tentando achar proximo corresp: ", prox_corresp_errado_index, prox_corresp_ideal_index)
-                errado_comp_false = errado[errado_index:errado_index+prox_corresp_errado_index]
+                prox_corresp_realizado_index, prox_corresp_ideal_index = prox_corresp
+                # print("tentando achar proximo corresp: ", prox_corresp_realizado_index, prox_corresp_ideal_index)
+                realizado_comp_false = realizado[realizado_index:realizado_index+prox_corresp_realizado_index]
                 ideal_comp_false = idealizado[ideal_index:ideal_index+prox_corresp_ideal_index] 
-                # print('             errado_comp_false:', errado_comp_false)
+                # print('             realizado_comp_false:', realizado_comp_false)
                 # print('              ideal_comp_false:', ideal_comp_false)
                 
                 
                 
-                blocos[bloco_index] += errado_comp_false
+                blocos[bloco_index] += realizado_comp_false
                 blocos_ideal[bloco_index] += ideal_comp_false
                 
                 # print('add True block')
@@ -106,19 +106,19 @@ def comparacao(errado, idealizado):
                 blocos_ideal.append('')
                 blocos_correspondencia.append(True)
                 bloco_index += 1
-                # if(len(errado_comp_false)!=0): #
-                errado_index += prox_corresp_errado_index-1
+                # if(len(realizado_comp_false)!=0): #
+                realizado_index += prox_corresp_realizado_index-1
                 # else:
-                #     errado_index -= 1
+                #     realizado_index -= 1
                     
-                # print('errado_index: ', errado_index)
+                # print('realizado_index: ', realizado_index)
                 ideal_index += prox_corresp_ideal_index
-        errado_index += 1
+        realizado_index += 1
             # else:
                 
             
-            # blocos[bloco_index] += (errado[letra_index])
+            # blocos[bloco_index] += (realizado[letra_index])
             # blocos_ideal[bloco_index] += idealizado[ideal_index]
             # blocos_correspondencia[bloco_index]=False
 
-    return({'blocos_errado': blocos, 'blocos_idealizado': blocos_ideal, 'blocos_correspondencia':blocos_correspondencia})
+    return({'blocos_realizado': blocos, 'blocos_idealizado': blocos_ideal, 'blocos_correspondencia':blocos_correspondencia})

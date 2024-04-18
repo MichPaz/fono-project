@@ -9,6 +9,9 @@ class Auth {
         next: NextFunction
     ): Promise<void> {
         const authorization = String(req.headers.authorization)
+        // console.log('req.headers: ', req.headers)
+        // console.log('req.headers.authorization: ', req.headers.authorization)
+        // console.log('authorization: ', authorization)
         if (!authorization || !authorization.includes('Bearer')) {
             res.sendStatus(401)
             return
@@ -20,14 +23,14 @@ class Auth {
             res.sendStatus(401)
             return
         } else {
-           const exp = new Date(payload.exp as number)
-           console.log("exp", exp);
-           console.log("now", new Date());
-           
-        //    if(exp < new Date()){
-        //     res.sendStatus(401).send("Time expired")
-        //     return
-        //    }
+            // const exp = new Date(payload.exp as number)
+            // console.log("exp", exp);
+            // console.log("now", new Date());
+
+            //    if(exp < new Date()){
+            //     res.sendStatus(401).send("Time expired")
+            //     return
+            //    }
         }
 
         const userId: number = payload.id

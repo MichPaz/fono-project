@@ -6,7 +6,7 @@ import Auth from '../../middlewares/auth'
 const mainRouter: Router = Router();
 
 mainRouter
-    .route('/login')
+    .route('/signIn')
     .post(Validate(Requirements.login), AuthController.login);
 mainRouter
     .route('/tokenVerify')

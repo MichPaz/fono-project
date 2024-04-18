@@ -4,7 +4,7 @@ const errosFonologicosRequirement = {
     createErroFonologico: [
         body('tipo_interacao').isString(),
         body('tipo_acao').isString(),
-        body('errado').isString(),
+        body('realizado').isString(),
         body('idealizado').isString(),
     ],
     getErroFonologicoDetail: [param('id').isInt()],
@@ -12,7 +12,7 @@ const errosFonologicosRequirement = {
         param('id').isInt(),
         body('tipo_interacao').isString(),
         body('tipo_acao').isString(),
-        body('errado').isString(),
+        body('realizado').isString(),
         body('idealizado').isString(),
     ],
     deleteErroFonologico: [param('id').isInt()]

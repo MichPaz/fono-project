@@ -29,18 +29,18 @@ class AuthController {
         try {
             const user = req.userdata
 
-
+            // console.log("req.headers", req.headers)
             const authorization = String(req.headers.authorization)
             if (!authorization || !authorization.includes('Bearer')) {
                 res.sendStatus(401)
                 return
             }
-            const token = authorization?.slice(7)
-            const payload = await JWT.verifyToken(token)
-            if (payload) {
-                console.log('payload: ', payload)
-                console.log('payload time: ', new Date(payload.iat as number), new Date(payload.exp as number))
-            }
+            // const token = authorization?.slice(7)
+            // const payload = await JWT.verifyToken(token)
+            // if (payload) {
+            //     console.log('payload: ', payload)
+            //     console.log('payload time: ', new Date(payload.iat as number), new Date(payload.exp as number))
+            // }
     
 
             const body = await AuthService.tokenVerify(user)
