@@ -65,7 +65,9 @@ class AuthService implements IAuthService {
         }
 
         const userOfSession = await UserRepository.getDetail(user.id)
+        const adminOfSession = await AdminRepository.getByUserId(user.id)
         if(userOfSession) response.user = userOfSession
+        if(adminOfSession) response.admin = adminOfSession
 
         return response
     }
