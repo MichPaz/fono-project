@@ -9,6 +9,7 @@ import {
 import { HiArrowNarrowRight } from "react-icons/hi";
 import { IDesvio, tipoDesvioToIcon, tiposEtiquetasDesvios } from '../../../types/desvios';
 import { Grid } from "@mui/material";
+import { getQwertyDistance } from "../../../features/keyboardDistance";
 
 const { Title, Text } = Typography;
 
@@ -18,7 +19,14 @@ export const UIDesvio: React.FC<UIDesvio> = ({
   desvio,
 }) => {
 
-  let qwertyDistance = undefined
+  let qwertyDistance: number | undefined = undefined
+
+  const { realizado, idealizado } = desvio
+
+  if (realizado.length === idealizado.length && idealizado.length === 1) {
+    qwertyDistance = getQwertyDistance(realizado, idealizado)
+  }
+
 
   return (
     <Grid container spacing={0} style={{ padding: "12px" }}>
