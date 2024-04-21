@@ -2,7 +2,6 @@ import React from "react";
 import {
   Typography,
   Avatar,
-  Row,
   Tag,
 } from "antd";
 

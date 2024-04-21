@@ -9,33 +9,43 @@ import {
 } from "antd";
 
 import { useAuth } from "../../store/session";
-import { getErrosFonologicos } from "../../services/ErroFonologico";
-import { IErroFonologico, tipoAcaoToIcon, tipoInteracaoToLabel } from "../../types/erroFonologico";
+// import { getErrosFonologicos } from "../../services/ErroFonologico";
+import { IErroFonologico, tipoAcaoToIcon } from "../../types/erroFonologico";
 import { UIErroFonologico } from "../organisms/ErroFonologico";
+import { CreateErroModal } from "../organisms/ErroFonologico/create";
+import { useErroFonologico } from "../../store/ErroFonologico";
 
 const { Title } = Typography;
 
 function ErrosFonologicos() {
   const { logout, session } = useAuth()
-  const [errosFonologicos, setErrosFonologicos] = useState<IErroFonologico[]>([]);
+  const { errosFonologicos, refreshListOfErroFonologico } = useErroFonologico()
   const [erroFonologico, setErroFonologico] = useState<IErroFonologico | undefined>();
+  const [openCreateErro, setOpenCreateErro] = useState(false);
+  const [init, setInit] = useState(true);
   // const [mostarCorrespondentes, setMostarCorrespondentes] = useState<boolean>(false);
 
 
-
+  const showModalCreateErro = () => {
+    setOpenCreateErro(true)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const resp = await getErrosFonologicos()
-      if (!!resp) {
-        console.log(resp);
-        setErrosFonologicos(resp as IErroFonologico[]);
-        setErroFonologico(resp.at(0))
+      if (init) {
+        const resp = await refreshListOfErroFonologico()
+        if (!!resp) {
+          console.log('resp: ', resp);
+          setInit(false)
+          // setErrosFonologicos(resp as IErroFonologico[]);
+          setErroFonologico(resp.at(0))
+        }
       }
     };
 
     fetchData();
-  }, [setErrosFonologicos]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errosFonologicos, init]);
 
   return (
     <div style={{ margin: '24px' }}>
@@ -50,6 +60,10 @@ function ErrosFonologicos() {
           <Row>
             <Title level={2}>Ocorrências</Title>
           </Row>
+          <Button type="primary" onClick={showModalCreateErro}>
+            Criar Erro fonológico
+          </Button>
+          <CreateErroModal open={openCreateErro} setOpen={setOpenCreateErro} />
           <Row>
             <List
               style={{

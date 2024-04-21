@@ -68,9 +68,11 @@ class UserController {
         try {
             const id = Number(req.params.id)
             const payload: ErroFonologicoInputUpdate = req.body
+            const erroFonologico = await ErroFonologicoService.getDetail(id)
             await ErroFonologicoService.update(id, payload)
             res.status(200).send({
-                message: 'Erro Fonológico updated successfully'
+                message: 'Erro Fonológico updated successfully',
+                data: erroFonologico
             })
         } catch (error) {
             next(error)
@@ -84,9 +86,11 @@ class UserController {
     ): Promise<void> {
         try {
             const id = Number(req.params.id)
+            const erroFonologico = await ErroFonologicoService.getDetail(id)
             await ErroFonologicoService.delete(id)
             res.status(200).send({
-                message: 'Erro Fonológico deleted successfully'
+                message: 'Erro Fonológico deleted successfully',
+                data: erroFonologico
             })
         } catch (error) {
             next(error)

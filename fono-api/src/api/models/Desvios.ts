@@ -3,7 +3,7 @@ import { db } from '../../database/config';
 import appConfig from '../../config/appConfig';
 // import { UserOutput } from './ErroFonologico';
 
-type TipoDesvio = 'omissao' | 'adicao' | 'troca' | 'indefinido' | 'correspondente'
+type TipoDesvio = 'omissao' | 'adicao' | 'troca' | 'indefinido' | 'correspondente' | 'sequenciamento'
 
 export const classificaTipoDesvio = (idealizado: string, realizado: string) => {
     let classificacao: TipoDesvio = "troca";

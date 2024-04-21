@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Typography,
     Tag,
+    Button,
 } from "antd";
 
 import { IDesvio, tipoAcaoToLabel } from '../../../types/desvios';
 import { IErroFonologico, tipoInteracaoToLabel } from "../../../types/erroFonologico";
 import { Grid } from "@mui/material";
 import { Desvios } from "../Desvios";
+import { UpdateErroModal } from "./update";
+import { DeleteErroModal } from "./delete";
 
 const { Title, Text } = Typography;
 
@@ -22,6 +25,9 @@ export const UIErroFonologico: React.FC<IAErroFonologico> = ({
     erroFonologico,
 }) => {
 
+    const [openUpdate, setOpenUpdate] = useState(false)
+    const [openDelete, setOpenDelete] = useState(false)
+
     const title = `${tipoInteracaoToLabel[erroFonologico.tipo_interacao]} - ${tipoAcaoToLabel[erroFonologico?.tipo_acao]}`
     const { realizado, idealizado, desvios } = erroFonologico
     const realizadoTitle = `${textoOuPalavra(realizado)} Destorcid${textoOuPalavra(realizado).slice(-1)}`
@@ -34,6 +40,27 @@ export const UIErroFonologico: React.FC<IAErroFonologico> = ({
                 <Text>
                     {title}
                 </Text>
+
+                <Button type="primary" onClick={() => setOpenUpdate(true)}>
+                    Editar
+                </Button>
+
+                <Button type="primary" onClick={() => setOpenDelete(true)}>
+                    Apagar
+                </Button>
+
+                <UpdateErroModal
+                    erroFonologico={erroFonologico}
+                    open={openUpdate}
+                    setOpen={setOpenUpdate}
+                />
+
+                <DeleteErroModal
+                    erroFonologico={erroFonologico}
+                    open={openDelete}
+                    setOpen={setOpenDelete}
+                />
+
             </Grid>
 
             <Grid item xs={12}>

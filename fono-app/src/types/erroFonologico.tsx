@@ -40,3 +40,18 @@ export interface IErroFonologico {
 
     user?: UserOutput
 }
+
+export interface IErroFonologicoInput {
+    tipo_interacao: TipoIteracao
+    tipo_acao: TipoAcao
+    realizado: string
+    idealizado: string
+}
+
+export interface IErroFonologicoUpdateInput {
+    id: number
+    tipo_interacao: TipoIteracao
+    tipo_acao: TipoAcao
+    realizado: string
+    idealizado: string
+}

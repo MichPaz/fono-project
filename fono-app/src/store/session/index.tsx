@@ -90,7 +90,7 @@ function AuthProvider({ children }: { children: ReactNode | undefined }) {
       setAuthApiRequestsHeader(token)
       await fonoAPI.get('/tokenVerify')
         .then((response: any) => {
-          const {user, admin} = response.data.data
+          const { user, admin } = response.data.data
           const mySession = { token, user, admin }
           userInfo = mySession
           setSession(mySession)
@@ -146,7 +146,7 @@ function AuthProvider({ children }: { children: ReactNode | undefined }) {
 
   useEffect(() => {
     void fecthSession()
-    //  disable next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

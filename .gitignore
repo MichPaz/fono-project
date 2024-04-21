@@ -1,3 +1,4 @@
 fono-api/src/api/tests/data/*
+fono-api/node_modules/*
 fono-app/node_modules/*
 fono-app/build/*

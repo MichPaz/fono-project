@@ -13,7 +13,7 @@ import Desvios /*, { classificaTipoDesvio, Comparacao, makeDesvios } */ from './
 type TipoIteracao = 'entrada' | 'saida'
 type TipoAcao = 'escrevi' | 'cantei' | 'li' | 'compreendi' | 'escutei'
 
-interface ErroFonologicoAttributes {
+export interface ErroFonologicoAttributes {
     id: number
     tipo_interacao: TipoIteracao
     tipo_acao: TipoAcao
