@@ -54,11 +54,12 @@ function AuthProvider({ children }: { children: ReactNode | undefined }) {
 
         setSession(dataSession)
         setAuthApiRequestsHeader(token)
-        const name = session?.admin?.name
+        const name = dataSession?.admin?.name
+        const message = `Boas vindas, ${name as string}`
         Alert.push({
           variant: 'success',
-          message: `Boas vindas, ${name as string}`,
-          title: 'Sucesso',
+          message,
+          title: 'SignIn ralizado com sucesso',
           archororigin: {
             vertical: 'top',
             horizontal: 'left'

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Input, Modal, Select, Space } from 'antd';
+import { Button, Input, Select, Space } from 'antd';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup'
 import { IErroFonologicoInput } from '../../../types/erroFonologico';
 import { createErroFonologico } from '../../../services/ErroFonologico';
 import { useErroFonologico } from '../../../store/ErroFonologico';
+import { DraggableModal } from '../DraggableModal';
+
 
 interface UIModalCreateErroFonologico {
   open: boolean
@@ -76,7 +78,6 @@ export const CreateErroModal: React.FC<UIModalCreateErroFonologico> = (
     }
   }
 
-
   return (
     <>
       <Formik
@@ -108,19 +109,21 @@ export const CreateErroModal: React.FC<UIModalCreateErroFonologico> = (
           // console.log('touched: ', touched)
 
           return (
-            <Modal
+            <DraggableModal
               open={open}
-              title="Criar Erro Fonológico"
+              props={{
+                title: 'Criar Erro  Fonológico',
+                footer: [
+                  <Button key="back" onClick={() => { handleCancel(); resetForm() }}>
+                    Cancelar
+                  </Button>,
+                  <Button key="submit" type="primary" loading={loading} onClick={() => handleCreate(values, { resetForm })}>
+                    Registrar
+                  </Button>
+                ]
+              }}
               // onOk={()=>handleCreate(values)}
-              onCancel={handleCancel}
-              footer={[
-                <Button key="back" onClick={() => { handleCancel(); resetForm() }}>
-                  Cancelar
-                </Button>,
-                <Button key="submit" type="primary" loading={loading} onClick={() => handleCreate(values, { resetForm })}>
-                  Registrar
-                </Button>
-              ]}
+              setOpen={setOpen}
             >
               <Form onKeyDown={(e: any) => onKeyDown(handleSubmit, e)}>
                 <Space
@@ -160,19 +163,9 @@ export const CreateErroModal: React.FC<UIModalCreateErroFonologico> = (
                     value={values.idealizado}
                     placeholder="Digite o que foi idealizado"
                   />
-                  {/* <Button
-                    loading={loadingSignIn}
-                    style={{ width: 80, marginTop: '18px' }}
-                    type="primary"
-                    htmlType="submit"
-                  // onClick={siginAction}
-                  // onClick={() => handleSubmit()}
-                  >
-                    Entrar
-                  </Button> */}
                 </Space>
               </Form>
-            </Modal>
+            </DraggableModal>
           )
         }}
       </Formik>

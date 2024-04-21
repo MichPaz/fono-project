@@ -14,6 +14,8 @@ import { IErroFonologico, tipoAcaoToIcon } from "../../types/erroFonologico";
 import { UIErroFonologico } from "../organisms/ErroFonologico";
 import { CreateErroModal } from "../organisms/ErroFonologico/create";
 import { useErroFonologico } from "../../store/ErroFonologico";
+import { Theme, useMediaQuery } from "@mui/material";
+import { DraggableModal } from "../organisms/DraggableModal";
 
 const { Title } = Typography;
 
@@ -21,9 +23,10 @@ function ErrosFonologicos() {
   const { logout, session } = useAuth()
   const { errosFonologicos, refreshListOfErroFonologico } = useErroFonologico()
   const [erroFonologico, setErroFonologico] = useState<IErroFonologico | undefined>();
+  const [openErro, setOpenErro] = useState(false);
   const [openCreateErro, setOpenCreateErro] = useState(false);
   const [init, setInit] = useState(true);
-  // const [mostarCorrespondentes, setMostarCorrespondentes] = useState<boolean>(false);
+  const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
 
 
   const showModalCreateErro = () => {
@@ -56,7 +59,7 @@ function ErrosFonologicos() {
         </Col>
       </Row>
       <Row>
-        <Col span={12}>
+        <Col span={hidden ? 24 : 12}>
           <Row>
             <Title level={2}>Ocorrências</Title>
           </Row>
@@ -83,7 +86,7 @@ function ErrosFonologicos() {
                       />
                     }
                     title={
-                      <Button onClick={() => setErroFonologico(item)}>
+                      <Button onClick={() => { setOpenErro(true); setErroFonologico(item) }}>
                         {item.realizado}
                       </Button>
                     }
@@ -94,17 +97,37 @@ function ErrosFonologicos() {
             />
           </Row>
         </Col>
-        <Col span={12}>
-          <Row>
-            <Title level={2}>Erro Fonológico selecionado</Title>
-          </Row>
-          <Row>
-            {erroFonologico && <UIErroFonologico
-              erroFonologico={erroFonologico}
-            />
+        {hidden ?
+          <DraggableModal
+            open={openErro}
+            setOpen={setOpenErro}
+            props={{
+              title: "Erro Fonológico",
+              footer: [
+              ]
+            }}
+            // onOk={()=>handleCreate(values)}
+            onCancel={() => setOpenErro(false)}
+          >
+            {
+              erroFonologico && <UIErroFonologico
+                erroFonologico={erroFonologico}
+              />
             }
-          </Row>
-        </Col>
+          </DraggableModal>
+          :
+          <Col span={12}>
+            <Row>
+              <Title level={2}>Erro Fonológico selecionado</Title>
+            </Row>
+            <Row>
+              {erroFonologico && <UIErroFonologico
+                erroFonologico={erroFonologico}
+              />
+              }
+            </Row>
+          </Col>
+        }
       </Row>
     </div>
   );

@@ -3,6 +3,7 @@ import {
     Typography,
     Tag,
     Button,
+    Space,
 } from "antd";
 
 import { IDesvio, tipoAcaoToLabel } from '../../../types/desvios';
@@ -41,13 +42,21 @@ export const UIErroFonologico: React.FC<IAErroFonologico> = ({
                     {title}
                 </Text>
 
-                <Button type="primary" onClick={() => setOpenUpdate(true)}>
-                    Editar
-                </Button>
+            </Grid>
 
-                <Button type="primary" onClick={() => setOpenDelete(true)}>
-                    Apagar
-                </Button>
+            <Grid item xs={12}>
+
+                <Space>
+
+                    <Button type="primary" onClick={() => setOpenUpdate(true)}>
+                        Editar
+                    </Button>
+
+                    <Button type="primary" onClick={() => setOpenDelete(true)}>
+                        Apagar
+                    </Button>
+
+                </Space>
 
                 <UpdateErroModal
                     erroFonologico={erroFonologico}

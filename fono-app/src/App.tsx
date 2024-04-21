@@ -7,6 +7,9 @@ import { useAuth } from './store/session'
 import { Loading } from './components/pages/Loading'
 import ErrosFonologicos from "./components/pages/ErrosFonologicos";
 import { ErroFonologicoProvider } from "./store/ErroFonologico";
+import { createTheme, ThemeProvider } from "@mui/material";
+
+const theme = createTheme();
 
 function App() {
   console.log()
@@ -14,17 +17,19 @@ function App() {
 
   return (
     <div className="App">
-      <AlertProvider>
-        {loading
-          ? Loading
-          : logged ?
-            <ErroFonologicoProvider>
-              <ErrosFonologicos />
-            </ErroFonologicoProvider>
-            :
-            <Login />
-        }
-      </AlertProvider>
+      <ThemeProvider theme={theme}>
+        <AlertProvider>
+          {loading
+            ? Loading
+            : logged ?
+              <ErroFonologicoProvider>
+                <ErrosFonologicos />
+              </ErroFonologicoProvider>
+              :
+              <Login />
+          }
+        </AlertProvider>
+      </ThemeProvider>
     </div>
 
     // </Provider>,

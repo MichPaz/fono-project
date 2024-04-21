@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Input, Modal, Select, Space } from 'antd';
+import { Button, Input, Select, Space } from 'antd';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup'
 import { IErroFonologicoUpdateInput } from '../../../types/erroFonologico';
 import { updateErroFonologico } from '../../../services/ErroFonologico';
 import { useErroFonologico } from '../../../store/ErroFonologico';
+import { DraggableModal } from '../DraggableModal';
 
 interface UIModalUpdateErroFonologico {
   open: boolean
@@ -96,8 +97,6 @@ export const UpdateErroModal: React.FC<UIModalUpdateErroFonologico> = (
           handleReset
         }) => {
 
-          // const tipoInteracaoError = (Boolean(touched.tipo_interacao) ?? false) && Boolean(errors.tipo_interacao) ? 'error' : undefined
-          // const tipoAcaoError = (Boolean(touched.tipo_acao) ?? false) && Boolean(errors.tipo_acao) ? 'error' : undefined
           const realizadoError = (Boolean(touched.realizado) ?? false) && Boolean(errors.tipo_acao) ? 'error' : undefined
           const idealizadoError = (Boolean(touched.idealizado) ?? false) && Boolean(errors.idealizado) ? 'error' : undefined
 
@@ -105,19 +104,22 @@ export const UpdateErroModal: React.FC<UIModalUpdateErroFonologico> = (
           // console.log('touched: ', touched)
 
           return (
-            <Modal
+            <DraggableModal
+              setOpen={setOpen}
               open={open}
-              title="Editar Erro Fonológico"
               // onOk={()=>handleUpdate(values)}
               onCancel={handleCancel}
-              footer={[
-                <Button key="back" onClick={() => { handleCancel(); resetForm() }}>
-                  Cancelar
-                </Button>,
-                <Button key="submit" type="primary" loading={loading} onClick={() => handleUpdate(values, { resetForm })}>
-                  Confirmar
-                </Button>
-              ]}
+              props={{
+                title: 'Editar Erro  Fonológico',
+                footer: [
+                  <Button key="back" onClick={() => { handleCancel(); resetForm() }}>
+                    Cancelar
+                  </Button>,
+                  <Button key="submit" type="primary" loading={loading} onClick={() => handleUpdate(values, { resetForm })}>
+                    Confirmar
+                  </Button>
+                ]
+              }}
             >
               <Form onKeyDown={(e: any) => onKeyDown(handleSubmit, e)}>
                 <Space
@@ -169,7 +171,7 @@ export const UpdateErroModal: React.FC<UIModalUpdateErroFonologico> = (
                   </Button> */}
                 </Space>
               </Form>
-            </Modal>
+            </DraggableModal>
           )
         }}
       </Formik>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import { IErroFonologico } from '../../../types/erroFonologico';
 import { deleteErroFonologico } from '../../../services/ErroFonologico';
 import { useErroFonologico } from '../../../store/ErroFonologico';
+import { DraggableModal } from '../DraggableModal';
 
 interface UIModalUpdateErroFonologico {
     open: boolean
@@ -36,25 +37,24 @@ export const DeleteErroModal: React.FC<UIModalUpdateErroFonologico> = (
     }
 
     return (
-        <>
-
-            <Modal
-                open={open}
-                title="Apagar Erro Fonológico"
-                // onOk={()=>handleUpdate(values)}
-                onCancel={handleCancel}
-                footer={[
+        <DraggableModal
+            open={open}
+            setOpen={setOpen}
+            props={{
+                title: 'Apagar Erro Fonológico',
+                footer: [
                     <Button key="back" onClick={() => { handleCancel() }}>
                         Cancelar
                     </Button>,
                     <Button key="submit" type="primary" loading={loading} onClick={() => handleDelete()}>
                         Confirmar
                     </Button>
-                ]}
-            >
-                <p>Tem certeza que deseja excluir este registro?</p>
-            </Modal>
-
-        </>
+                ]
+            }}
+            // onOk={()=>handleUpdate(values)}
+            onCancel={handleCancel}
+        >
+            <p>Tem certeza que deseja excluir este registro?</p>
+        </DraggableModal>
     );
 };
