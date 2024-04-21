@@ -1,10 +1,10 @@
 import React, { useState, createContext, useContext, ReactNode } from 'react'
-import { ErroFonologicoAttributes, ErroFonologicoOutput } from '../../../../fono-api/src/api/models/ErroFonologico';
 import { getErrosFonologicos } from '../../services/ErroFonologico';
+import { IErroFonologico } from '../../types/erroFonologico';
 
 interface IErroFonologicoContext {
-  errosFonologicos: ErroFonologicoOutput[]
-  refreshListOfErroFonologico: () => Promise<ErroFonologicoAttributes[] | undefined>
+  errosFonologicos: IErroFonologico[]
+  refreshListOfErroFonologico: () => Promise<IErroFonologico[] | undefined>
   loading: boolean
 }
 const ErroFonologicoContext = createContext<IErroFonologicoContext | null>(null)
@@ -12,9 +12,9 @@ const ErroFonologicoContext = createContext<IErroFonologicoContext | null>(null)
 function ErroFonologicoProvider({ children }: { children: ReactNode | undefined }) {
 
   const [loading, setLoading] = useState<boolean>(true)
-  const [errosFonologicos, setErrosFonologicos] = useState<ErroFonologicoOutput[]>([])
+  const [errosFonologicos, setErrosFonologicos] = useState<IErroFonologico[]>([])
 
-  async function refreshListOfErroFonologico(): Promise<ErroFonologicoAttributes[] | undefined> {
+  async function refreshListOfErroFonologico(): Promise<IErroFonologico[] | undefined> {
     setLoading(true)
     const data = await getErrosFonologicos()
     setLoading(false)

@@ -1,15 +1,14 @@
 import { IErroFonologico, IErroFonologicoInput, IErroFonologicoUpdateInput } from "../../types/erroFonologico"
 import Alert from '../../services/alert'
 import { fonoAPI } from "../fonoAPI"
-import { ErroFonologicoOutput } from "../../../../fono-api/src/api/models/ErroFonologico"
 
 interface ResponseErroFonologico {
     message: string
-    data: ErroFonologicoOutput[]
+    data: IErroFonologico[]
 }
 
-export const getErrosFonologicos: () => Promise<ErroFonologicoOutput[] | undefined> = async () => {
-    let response: ErroFonologicoOutput[] | undefined = undefined
+export const getErrosFonologicos: () => Promise<IErroFonologico[] | undefined> = async () => {
+    let response: IErroFonologico[] | undefined = undefined
     // console.log('fonoAPI aquii', fonoAPI.defaults.headers)
     await fonoAPI.get('/erroFonologico')
         .then((res: { data: ResponseErroFonologico }) => {
