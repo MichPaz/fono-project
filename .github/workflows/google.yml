@@ -61,7 +61,7 @@ jobs:
         npm run build
 
     - name: configure cred docker
-      uses: google-github-actions/setup-gcloud@main'
+      uses: google-github-actions/setup-gcloud@v2
       with:
         service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
         project_id: ${{ env.GOOGLE_PROJECT }}
