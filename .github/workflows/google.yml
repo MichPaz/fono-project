@@ -35,7 +35,8 @@ jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-    environment: production
+    environment:
+      name: ${{ github.ref_name }}
 
     permissions:
       contents: 'read'
@@ -47,29 +48,57 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: 16.
+        secrets: GOOGLE_CLOUD_BUILD_CREDENTIALS
+
+    - name: defineProjectVersion
+      run: |
+        VERSION=$(cat projectVersion)
+        echo "Valor da versão: $VERSION"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
     - name: installBuildFonoAPP
       run: |
         cd fono-app/
         npm install --legacy-peer-deps
         npm run build
-    
-    # - name: Checkout
-    #   uses: actions/checkout@v4
 
+    - name: obterSecretRegistry
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const secret = core.secrets.getSecret('GOOGLE_CLOUD_BUILD_CREDENTIALS');
+          const credentials = JSON.parse(secret.value);
+          core.setOutput('dockerCredentials', credentials.dockerCredentials);
+
+    - name: configureDockerLogin
+      run: |
+        echo "DOCKER_USERNAME=$({{ steps.get-credentials.outputs.dockerCredentials.username }})" >> $GITHUB_ENV
+        echo "DOCKER_PASSWORD=$({{ steps.get-credentials.outputs.dockerCredentials.password }})" >> $GITHUB_ENV
+
+    - name: loginDocker
+      run: |
+        docker login --username ${{ steps.get-credentials.outputs.dockerCredentials.username }} --password ${{ steps.get-credentials.outputs.dockerCredentials.password }}
+  
+
+    - name: buildPushFonoAPP
+      run: |
+        docker build -t ${{ env.REPOSITORY_APP }}$ENV_SUFFIX:$VERSION .
+        docker push gcr.io/seu-projeto/sua-imagem:$VERSION
+    
     # # Configure Workload Identity Federation and generate an access token.
     # - id: 'auth'
     #   name: 'Authenticate to Google Cloud'
     #   uses: 'google-github-actions/auth@v0'
     #   with:
     #     token_format: 'access_token'
-    #     workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+    #     # workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
     #     service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
 
-    # # Alternative option - authentication via credentials json
-    # # - id: 'auth'
-    # #   uses: 'google-github-actions/auth@v0'
-    # #   with:
-    # #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+    # Alternative option - authentication via credentials json
+    # - id: 'auth'
+    #   uses: 'google-github-actions/auth@v0'
+    #   with:
+    #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
     # - name: Docker configuration
     #   run: |-
@@ -81,11 +110,11 @@ jobs:
     #     cluster_name: ${{ env.GKE_CLUSTER }}
     #     location: ${{ env.GKE_ZONE }}
 
-    # # Build the Docker image
+    # Build the Docker image
     # - name: Build
     #   run: |-
     #     docker build \
-    #       --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
+    #       --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_APP/$IMAGE:$GITHUB_SHA" \
     #       --build-arg GITHUB_SHA="$GITHUB_SHA" \
     #       --build-arg GITHUB_REF="$GITHUB_REF" \
     #       .
