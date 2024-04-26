@@ -49,6 +49,7 @@ jobs:
         node-version: 16.
     - name: installBuildFonoAPP
       run: |
+        cd fono-app/
         npm install --legacy-peer-deps
         npm run build
     
