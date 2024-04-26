@@ -61,7 +61,7 @@ jobs:
         npm run build
 
     - name: configure cred docker
-      uses: google-github-actions/setup-gcloud@main
+      uses: google-github-actions/setup-gcloud@v2'
       with:
         service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
         project_id: ${{ env.GOOGLE_PROJECT }}
@@ -70,7 +70,7 @@ jobs:
     - name: build and push the docker image
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ env.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}$ENV_SUFFIX:$VERSION 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}$ENV_SUFFIX:$VERSION 
       run: |
         gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
         docker build -t ${{ env.IMAGE_TAG }} .
