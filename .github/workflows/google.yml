@@ -24,9 +24,7 @@ env:
   DEPLOYMENT_NAME_COMP: fono-comp
   DEPLOYMENT_NAME_API: fono-api
   DEPLOYMENT_NAME_APP: fono-app
-  REPOSITORY_COMP: southamerica-east1-docker.pkg.dev/serious-flight-418601/fono-comp
-  REPOSITORY_API: southamerica-east1-docker.pkg.dev/serious-flight-418601/fono-api
-  REPOSITORY_APP: southamerica-east1-docker.pkg.dev/serious-flight-418601/fono-app
+  REGISTRY_DOMAIN: southamerica-east1-docker.pkg.dev
   IMAGE_COMP: fono-comp
   IMAGE_API: fono-api
   IMAGE_APP: fono-app
@@ -62,32 +60,35 @@ jobs:
         npm install --legacy-peer-deps
         npm run build
 
-    # - name: obterSecretRegistry
-    #   uses: actions/github-script@v6
-    #   with:
-    #     script: |
-    #       const secret = core.secrets.getSecret('GOOGLE_CLOUD_BUILD_CREDENTIALS');
-    #       const credentials = JSON.parse(secret.value);
-    #       core.setOutput('dockerCredentials', credentials.dockerCredentials);
-
-    # - name: configureDockerLogin
-    #   run: |
-    #     echo "DOCKER_USERNAME=$({{ steps.get-credentials.outputs.dockerCredentials.username }})" >> $GITHUB_ENV
-    #     echo "DOCKER_PASSWORD=$({{ steps.get-credentials.outputs.dockerCredentials.password }})" >> $GITHUB_ENV
-
-    - name: loginDocker
-      env: # Or as an environment variable
-        GOOGLE_CLOUD_BUILD_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_BUILD_CREDENTIALS }}
-        USERNAME: ${{ secrets.USERNAME }}
+    - name: install the gcloud cli
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ secrets.GOOGLE_PROJECT }}
+        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        export_default_credentials: true
+  
+    - name: build and push the docker image
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ env.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}$ENV_SUFFIX:$VERSION 
       run: |
-        export CR_PAT=${{env.GOOGLE_CLOUD_BUILD_CREDENTIALS}}
-        echo $CR_PAT | docker login southamerica-east1-docker.pkg.dev -u $USERNAME --password-stdin
+        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
+        docker build -t ${{ env.IMAGE_TAG }} .
+        docker push ${{ env.IMAGE_TAG }}
+
+    # - name: loginDocker
+    #   env: # Or as an environment variable
+    #     GOOGLE_CLOUD_BUILD_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_BUILD_CREDENTIALS }}
+    #     USERNAME: ${{ secrets.USERNAME }}
+    #   run: |
+    #     export CR_PAT=${{env.GOOGLE_CLOUD_BUILD_CREDENTIALS}}
+    #     echo $CR_PAT | docker login southamerica-east1-docker.pkg.dev -u $USERNAME --password-stdin
   
 
-    - name: buildPushFonoAPP
-      run: |
-        docker build -t ${{ env.REPOSITORY_APP }}$ENV_SUFFIX:$VERSION .
-        docker push gcr.io/seu-projeto/sua-imagem:$VERSION
+    # - name: buildPushFonoAPP
+    #   run: |
+    #     docker build -t ${{ env.REPOSITORY_APP }}$ENV_SUFFIX:$VERSION .
+    #     docker push gcr.io/seu-projeto/sua-imagem:$VERSION
     
     # # Configure Workload Identity Federation and generate an access token.
     # - id: 'auth'
