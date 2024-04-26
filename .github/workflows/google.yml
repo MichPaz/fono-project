@@ -73,6 +73,7 @@ jobs:
         IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}$ENV_SUFFIX:$VERSION 
       run: |
         gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
+        cd fono-app/
         docker build -t ${{ env.IMAGE_TAG }} .
         docker push ${{ env.IMAGE_TAG }}
 
