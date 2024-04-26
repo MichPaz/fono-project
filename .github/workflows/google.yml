@@ -62,22 +62,26 @@ jobs:
         npm install --legacy-peer-deps
         npm run build
 
-    - name: obterSecretRegistry
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const secret = core.secrets.getSecret('GOOGLE_CLOUD_BUILD_CREDENTIALS');
-          const credentials = JSON.parse(secret.value);
-          core.setOutput('dockerCredentials', credentials.dockerCredentials);
+    # - name: obterSecretRegistry
+    #   uses: actions/github-script@v6
+    #   with:
+    #     script: |
+    #       const secret = core.secrets.getSecret('GOOGLE_CLOUD_BUILD_CREDENTIALS');
+    #       const credentials = JSON.parse(secret.value);
+    #       core.setOutput('dockerCredentials', credentials.dockerCredentials);
 
-    - name: configureDockerLogin
-      run: |
-        echo "DOCKER_USERNAME=$({{ steps.get-credentials.outputs.dockerCredentials.username }})" >> $GITHUB_ENV
-        echo "DOCKER_PASSWORD=$({{ steps.get-credentials.outputs.dockerCredentials.password }})" >> $GITHUB_ENV
+    # - name: configureDockerLogin
+    #   run: |
+    #     echo "DOCKER_USERNAME=$({{ steps.get-credentials.outputs.dockerCredentials.username }})" >> $GITHUB_ENV
+    #     echo "DOCKER_PASSWORD=$({{ steps.get-credentials.outputs.dockerCredentials.password }})" >> $GITHUB_ENV
 
     - name: loginDocker
+      env: # Or as an environment variable
+        GOOGLE_CLOUD_BUILD_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_BUILD_CREDENTIALS }}
+        USERNAME: ${{ secrets.USERNAME }}
       run: |
-        docker login --username ${{ steps.get-credentials.outputs.dockerCredentials.username }} --password ${{ steps.get-credentials.outputs.dockerCredentials.password }}
+        export CR_PAT=${{env.GOOGLE_CLOUD_BUILD_CREDENTIALS}}
+        echo $CR_PAT | docker login southamerica-east1-docker.pkg.dev -u $USERNAME --password-stdin
   
 
     - name: buildPushFonoAPP
