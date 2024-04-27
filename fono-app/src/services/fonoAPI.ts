@@ -1,5 +1,6 @@
 import axios from 'axios';
-const FONO_API_DOMAIN = "http://localhost:4002";
+import { FONO_API_DOMAIN } from '../config';
+
 const API_VERSION = 'v1'
 
 export const fonoAPI = axios.create({

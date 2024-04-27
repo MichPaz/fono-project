@@ -1,0 +1,1 @@
+export const FONO_API_DOMAIN = process.env.FONO_API_DOMAIN || "http://localhost:4002";

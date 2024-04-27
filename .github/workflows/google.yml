@@ -28,6 +28,7 @@ env:
   IMAGE_COMP: fono-comp
   IMAGE_API: fono-api
   IMAGE_APP: fono-app
+  IMAGE_DB: fono-db
 
 jobs:
   setup-build-publish-deploy:
@@ -54,11 +55,11 @@ jobs:
         echo "Valor da versão: $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-    - name: installBuildFonoAPP
-      run: |
-        cd fono-app/
-        npm install --legacy-peer-deps
-        npm run build
+    # - name: installBuildFonoAPP
+    #   run: |
+    #     cd fono-app/
+    #     npm install --legacy-peer-deps
+    #     npm run build
 
     - name: configure cred docker
       uses: google-github-actions/setup-gcloud@v2
@@ -67,7 +68,38 @@ jobs:
         project_id: ${{ env.GOOGLE_PROJECT }}
         export_default_credentials: true
   
-    - name: build and push the docker image
+  
+    - name: build and push the docker image FonoDB
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_DB}}$ENV_SUFFIX:$VERSION 
+      run: |
+        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
+        cd fono-db/
+        docker build -t ${{ env.IMAGE_TAG }} .
+        docker push ${{ env.IMAGE_TAG }}
+
+    - name: build and push the docker image FonoCOMP
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_COMP}}$ENV_SUFFIX:$VERSION 
+      run: |
+        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
+        cd fono-comp/
+        docker build -t ${{ env.IMAGE_TAG }} .
+        docker push ${{ env.IMAGE_TAG }}
+
+    - name: build and push the docker image FonoAPI
+      env:
+        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_API}}$ENV_SUFFIX:$VERSION 
+      run: |
+        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
+        cd fono-app/
+        docker build -t ${{ env.IMAGE_TAG }} .
+        docker push ${{ env.IMAGE_TAG }}
+
+    - name: build and push the docker image FonoAPP
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
         IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}$ENV_SUFFIX:$VERSION 
