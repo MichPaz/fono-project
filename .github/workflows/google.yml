@@ -24,7 +24,8 @@ env:
   DEPLOYMENT_NAME_COMP: fono-comp
   DEPLOYMENT_NAME_API: fono-api
   DEPLOYMENT_NAME_APP: fono-app
-  REGISTRY_DOMAIN: southamerica-east1-docker.pkg.dev
+  # REGISTRY_DOMAIN: southamerica-east1-docker.pkg.dev
+  REGISTRY_DOMAIN: gcr.io
   IMAGE_COMP: fono-comp
   IMAGE_API: fono-api
   IMAGE_APP: fono-app
@@ -68,13 +69,16 @@ jobs:
         project_id: ${{ env.GOOGLE_PROJECT }}
         export_default_credentials: true
   
+    - name: Configure Docker Client
+      run: |-
+        gcloud auth configure-docker --quiet
+        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }} --quiet
   
     - name: build and push the docker image FonoDB
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
         IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_DB}}$ENV_SUFFIX:$VERSION 
       run: |
-        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
         cd fono-db/
         docker build -t ${{ env.IMAGE_TAG }} .
         docker push ${{ env.IMAGE_TAG }}
@@ -84,7 +88,6 @@ jobs:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
         IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_COMP}}$ENV_SUFFIX:$VERSION 
       run: |
-        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
         cd fono-comp/
         docker build -t ${{ env.IMAGE_TAG }} .
         docker push ${{ env.IMAGE_TAG }}
@@ -94,8 +97,7 @@ jobs:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
         IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_API}}$ENV_SUFFIX:$VERSION 
       run: |
-        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
-        cd fono-app/
+        cd fono-api/
         docker build -t ${{ env.IMAGE_TAG }} .
         docker push ${{ env.IMAGE_TAG }}
 
@@ -104,7 +106,6 @@ jobs:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
         IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}$ENV_SUFFIX:$VERSION 
       run: |
-        gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }}
         cd fono-app/
         docker build -t ${{ env.IMAGE_TAG }} .
         docker push ${{ env.IMAGE_TAG }}
