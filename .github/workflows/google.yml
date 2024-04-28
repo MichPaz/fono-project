@@ -76,7 +76,7 @@ jobs:
     - name: build and push the docker image FonoDB
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_DB}}$ENV_SUFFIX:$VERSION 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_DB}}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} 
       run: |
         cd fono-db/
         docker build -t ${{ env.IMAGE_TAG }} .
@@ -85,7 +85,7 @@ jobs:
     - name: build and push the docker image FonoCOMP
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_COMP}}$ENV_SUFFIX:$VERSION 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_COMP}}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} 
       run: |
         cd fono-comp/
         docker build -t ${{ env.IMAGE_TAG }} .
@@ -94,7 +94,7 @@ jobs:
     - name: build and push the docker image FonoAPI
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_API}}$ENV_SUFFIX:$VERSION 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_API}}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} 
       run: |
         cd fono-api/
         docker build -t ${{ env.IMAGE_TAG }} .
@@ -103,7 +103,7 @@ jobs:
     - name: build and push the docker image FonoAPP
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}$ENV_SUFFIX:$VERSION 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} 
       run: |
         cd fono-app/
         docker build -t ${{ env.IMAGE_TAG }} .
@@ -120,7 +120,7 @@ jobs:
 
     # - name: buildPushFonoAPP
     #   run: |
-    #     docker build -t ${{ env.REPOSITORY_APP }}$ENV_SUFFIX:$VERSION .
+    #     docker build -t ${{ env.REPOSITORY_APP }}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} .
     #     docker push ${{ env.REPOSITORY_APP }}$ENV_SUFFIX:$VERSION
     
     # # Configure Workload Identity Federation and generate an access token.
