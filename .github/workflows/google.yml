@@ -24,12 +24,12 @@ env:
   DEPLOYMENT_NAME_COMP: fono-comp
   DEPLOYMENT_NAME_API: fono-api
   DEPLOYMENT_NAME_APP: fono-app
-  # REGISTRY_DOMAIN: southamerica-east1-docker.pkg.dev
-  REGISTRY_DOMAIN: gcr.io
+  REGISTRY_DOMAIN: southamerica-east1-docker.pkg.dev
   IMAGE_COMP: fono-comp
   IMAGE_API: fono-api
   IMAGE_APP: fono-app
   IMAGE_DB: fono-db
+  DEBUG_TRACE: true
 
 jobs:
   setup-build-publish-deploy:
@@ -71,7 +71,6 @@ jobs:
   
     - name: Configure Docker Client
       run: |-
-        gcloud auth configure-docker --quiet
         gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }} --quiet
   
     - name: build and push the docker image FonoDB
