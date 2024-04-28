@@ -62,6 +62,9 @@ jobs:
     #     npm install --legacy-peer-deps
     #     npm run build
 
+    - name: Check environment variables
+      run: env
+
     - name: configure cred docker
       uses: google-github-actions/setup-gcloud@v2
       with:
