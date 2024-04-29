@@ -93,7 +93,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
       with:
         service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-        project_id: ${{ env.GOOGLE_PROJECT }}
+        project_id: ${{ vars.GOOGLE_PROJECT }}
         export_default_credentials: true
   
     - name: Configure Docker Client
@@ -103,7 +103,7 @@ jobs:
     - name: build and push the docker image FonoDB
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_DB}}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_DB}}${{ vars.ENV_SUFFIX }}:${{ env.VERSION }} 
       run: |
         cd fono-db/
         docker build -t ${{ env.IMAGE_TAG }} .
@@ -112,7 +112,7 @@ jobs:
     - name: build and push the docker image FonoCOMP
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_COMP}}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_COMP}}${{ vars.ENV_SUFFIX }}:${{ env.VERSION }} 
       run: |
         cd fono-comp/
         docker build -t ${{ env.IMAGE_TAG }} .
@@ -121,7 +121,7 @@ jobs:
     - name: build and push the docker image FonoAPI
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_API}}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_API}}${{ vars.ENV_SUFFIX }}:${{ env.VERSION }} 
       run: |
         cd fono-api/
         docker build -t ${{ env.IMAGE_TAG }} .
@@ -130,7 +130,7 @@ jobs:
     - name: build and push the docker image FonoAPP
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}${{ env.ENV_SUFFIX }}:${{ env.VERSION }} 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}${{ vars.ENV_SUFFIX }}:${{ env.VERSION }} 
       run: |
         cd fono-app/
         docker build -t ${{ env.IMAGE_TAG }} .
