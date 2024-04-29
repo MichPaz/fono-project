@@ -32,12 +32,36 @@ env:
   DEBUG_TRACE: true
 
 jobs:
+  init:
+    name: Config Env
+    runs-on: ubuntu-latest
+    outputs:
+      gcloud_project: ${{ steps.setvars.outputs.gcloud_project }}
+      phase: ${{ steps.setvars.outputs.phase }}
+
+    steps:
+      - name: Cancel previous workflow
+        uses: styfle/cancel-workflow-action@0.4.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Set variables
+        id: setvars
+        run: |
+          if [[ "${{github.base_ref}}" == "master" || "${{github.ref}}" == "refs/heads/master" ]]; then
+            echo "::set-output name=gcloud_project::my-project-dev"
+            echo "::set-output name=phase::staging"
+          fi
+
+          if [[ "${{github.base_ref}}" == "production" || "${{github.ref}}" == "refs/heads/production" ]]; then
+            echo "::set-output name=gcloud_project::my-project-prd"
+            echo "::set-output name=phase::production"
+          fi
+
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name }}
-
+    environment: ${{ github.ref_name }}
     permissions:
       contents: 'read'
       id-token: 'write'
