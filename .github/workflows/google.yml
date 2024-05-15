@@ -97,8 +97,9 @@ jobs:
         export_default_credentials: true
   
     - name: Configure Docker Client
-      run: |-
+      run: |
         gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }} --quiet
+        gcloud projects get-iam-policy ${{ secrets.GOOGLE_PROJECT }}
   
     - name: build and push the docker image FonoDB
       env:
