@@ -103,11 +103,11 @@ jobs:
     - name: build and push the docker image FonoDB
       env:
         GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/serious-flight-418601/${{env.IMAGE_DB}}/${{ vars.ENV_LABEL }}:${{ env.VERSION }} 
+        IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_DB}}/${{ vars.ENV_LABEL }}:${{ env.VERSION }} 
       run: |
         cd fono-db/
-        docker build -t ${{ env.IMAGE_TAG }} .
-        docker push ${{ env.IMAGE_TAG }}
+        docker build -t southamerica-east1-docker.pkg.dev/serious-flight-418601/fono-db/${{ vars.ENV_LABEL }}:${{ env.VERSION }} .
+        docker push southamerica-east1-docker.pkg.dev/serious-flight-418601/fono-db/${{ vars.ENV_LABEL }}:${{ env.VERSION }}
 
     - name: build and push the docker image FonoCOMP
       env:
