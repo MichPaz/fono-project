@@ -99,6 +99,8 @@ jobs:
     - name: Configure Docker Client
       run: |
         gcloud auth configure-docker ${{ env.REGISTRY_DOMAIN }} --quiet
+        gcloud auth list
+        gcloud project list
         gcloud projects get-iam-policy ${{ secrets.GOOGLE_PROJECT }}
   
     - name: build and push the docker image FonoDB
