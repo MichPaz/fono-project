@@ -9,6 +9,7 @@ ENV SKIP_PREFLIGHT_CHECK=${SKIP_PREFLIGHT_CHECK}
 RUN apk add --no-cache nodejs-dev
 
 COPY ./src ./src
+COPY ./.env ./.env
 COPY ./package.json ./package.json
 COPY ./package-lock.json ./package-lock.json
 COPY ./tsconfig.json ./tsconfig.json

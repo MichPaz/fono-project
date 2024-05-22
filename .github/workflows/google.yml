@@ -138,6 +138,7 @@ jobs:
         IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_API}}/${{ vars.ENV_LABEL }}:${{ env.VERSION }} 
       run: |
         cd fono-api/
+        echo "FONO_API_ENV=${{ secrets.FONO_API_ENV }}" > .env
         docker build -t ${{ env.IMAGE_TAG }} .
         docker push ${{ env.IMAGE_TAG }}
 
@@ -147,6 +148,7 @@ jobs:
         IMAGE_TAG: ${{ env.REGISTRY_DOMAIN }}/${{ secrets.GOOGLE_PROJECT }}/${{env.IMAGE_APP}}/${{ vars.ENV_LABEL }}:${{ env.VERSION }} 
       run: |
         cd fono-app/
+        echo "FONO_API_ENV=${{ secrets.FONO_APP_ENV }}" > .env
         docker build -t ${{ env.IMAGE_TAG }} .
         docker push ${{ env.IMAGE_TAG }}
 
